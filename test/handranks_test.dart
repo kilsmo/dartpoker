@@ -1,6 +1,5 @@
 import 'package:test/test.dart';
 import 'package:dartpoker/hand_rank.dart';
-import 'package:collection/collection.dart';
 
 bool areHandsEqual(HandRank expected, HandRank actual) {
   return expected.compareTo(actual) == 0;

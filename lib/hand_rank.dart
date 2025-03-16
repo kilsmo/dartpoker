@@ -7,34 +7,46 @@ enum Suit {
 }
 
 /// Represents a card's rank, from two to ace.
-enum Rank {
-  two,
-  three,
-  four,
-  five,
-  six,
-  seven,
-  eight,
-  nine,
-  ten,
-  jack,
-  queen,
-  king,
-  ace
+enum Rank implements Comparable<Rank> {
+  two(2),
+  three(3),
+  four(4),
+  five(5),
+  six(6),
+  seven(7),
+  eight(8),
+  nine(9),
+  ten(10),
+  jack(11),
+  queen(12),
+  king(13),
+  ace(14);
+
+  final int value;
+  const Rank(this.value);
+
+  @override
+  int compareTo(Rank other) => value.compareTo(other.value);
 }
 
 /// Represents the HandStrength, from highCard to royalFlush.
-enum HandStrength {
-  highCard,
-  onePair,
-  twoPair,
-  threeOfAKind,
-  straight,
-  flush,
-  fullHouse,
-  fourOfAKind,
-  straightFlush,
-  royalFlush
+enum HandStrength implements Comparable<HandStrength> {
+  highCard(0),
+  onePair(1),
+  twoPair(2),
+  threeOfAKind(3),
+  straight(4),
+  flush(5),
+  fullHouse(6),
+  fourOfAKind(7),
+  straightFlush(8),
+  royalFlush(9);
+
+  final int value;
+  const HandStrength(this.value);
+
+  @override
+  int compareTo(HandStrength other) => value.compareTo(other.value);
 }
 
 /// Represents a card, with suit and rank.
@@ -52,12 +64,22 @@ class Card {
 /// for a full house kings over aces, ranks
 /// would be [Rank.king, Rank.ace].
 /// The HandStrength would be HandStrength.fullHouse
-class HandRank {
+class HandRank implements Comparable<HandRank> {
   final HandStrength handStrength;
   final List<Rank> ranks;
 
   HandRank(this.handStrength, this.ranks);
 
+  @override
+  int compareTo(HandRank other) {
+    if (handStrength != other.handStrength) return handStrength.compareTo(other.handStrength);
+    for (int i = 0; i < ranks.length; i++) {
+      if (ranks[i] != other.ranks[i]) {
+        return ranks[i].compareTo(other.ranks[i]);
+      }
+    }
+    return 0;
+  }
   /// Check if the poker hand represents a flush.
   static bool isFlush(List<Card> cards) {
     Suit suit = cards[0].suit;
@@ -152,7 +174,7 @@ class HandRank {
   }
 
   /// Creates a HandRank that is a pair,
-  /// since we already know that there are 2 different rank
+  /// since we already know that there are 4 different rank
   /// values.
   static HandRank createPair(List<Rank> ranks) {
     if (ranks[0] == ranks[1]) {

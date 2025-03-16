@@ -3,9 +3,7 @@ import 'package:dartpoker/hand_rank.dart';
 import 'package:collection/collection.dart';
 
 bool areHandsEqual(HandRank expected, HandRank actual) {
-  var listEquality = ListEquality();
-  return expected.handStrength == actual.handStrength &&
-    listEquality.equals(expected.ranks, actual.ranks);
+  return expected.compareTo(actual) == 0;
 }
 
 void main() {

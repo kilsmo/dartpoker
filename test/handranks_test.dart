@@ -5,6 +5,15 @@ bool areHandsEqual(HandRank expected, HandRank actual) {
   return expected.compareTo(actual) == 0;
 }
 
+bool isBetterThan(HandRank rank1, HandRank rank2) {
+  return rank1.compareTo(rank2) > 0;
+}
+
+bool isWorseThan(HandRank rank1, HandRank rank2) {
+  return rank1.compareTo(rank2) < 0;
+}
+
+
 void main() {
   group('highCard', () {
     test('should return highCard that is 5 cards sorted', () {
@@ -252,6 +261,84 @@ void main() {
       ]);
       expect(true, areHandsEqual(expected, actual));
     });
+  });
+
+  group('compare HandRanks', () {
+    test('should return true since both are the same full house', () {
+      var rank1 = HandRank(
+        HandStrength.fullHouse,
+        [Rank.ten, Rank.queen]
+      );
+      var rank2 = HandRank.create([
+        Card(Suit.clubs, Rank.ten),
+        Card(Suit.spades, Rank.ten),
+        Card(Suit.hearts, Rank.ten),
+        Card(Suit.diamonds, Rank.queen),
+        Card(Suit.clubs, Rank.queen)
+      ]);
+      expect(true, areHandsEqual(rank1, rank2));
+    });
+
+    test('should return true since the first rank is biggest', () {
+      var rank1 = HandRank(
+        HandStrength.fullHouse,
+        [Rank.ten, Rank.queen]
+      );
+      var rank2 = HandRank.create([
+        Card(Suit.clubs, Rank.ten),
+        Card(Suit.spades, Rank.ten),
+        Card(Suit.hearts, Rank.ten),
+        Card(Suit.diamonds, Rank.jack),
+        Card(Suit.clubs, Rank.jack)
+      ]);
+      expect(true, isBetterThan(rank1, rank2));
+    });
+
+    test('should return true since the second rank is biggest', () {
+      var rank1 = HandRank(
+        HandStrength.fullHouse,
+        [Rank.ten, Rank.queen]
+      );
+      var rank2 = HandRank.create([
+        Card(Suit.clubs, Rank.ten),
+        Card(Suit.spades, Rank.ten),
+        Card(Suit.hearts, Rank.ten),
+        Card(Suit.diamonds, Rank.king),
+        Card(Suit.clubs, Rank.king)
+      ]);
+      expect(true, isWorseThan(rank1, rank2));
+    });
+
+    test('should return true since the first handStrength is biggest', () {
+      var rank1 = HandRank(
+        HandStrength.fullHouse,
+        [Rank.ten, Rank.queen]
+      );
+      var rank2 = HandRank.create([
+        Card(Suit.clubs, Rank.ten),
+        Card(Suit.spades, Rank.ten),
+        Card(Suit.hearts, Rank.queen),
+        Card(Suit.diamonds, Rank.jack),
+        Card(Suit.clubs, Rank.jack)
+      ]);
+      expect(true, isBetterThan(rank1, rank2));
+    });
+
+    test('should return true since the second handStrength is biggest', () {
+      var rank1 = HandRank(
+        HandStrength.twoPair,
+        [Rank.queen, Rank.jack, Rank.ace]
+      );
+      var rank2 = HandRank.create([
+        Card(Suit.clubs, Rank.ten),
+        Card(Suit.spades, Rank.ten),
+        Card(Suit.hearts, Rank.ten),
+        Card(Suit.diamonds, Rank.jack),
+        Card(Suit.clubs, Rank.jack)
+      ]);
+      expect(true, isWorseThan(rank1, rank2));
+    });
+
   });
 
 }
